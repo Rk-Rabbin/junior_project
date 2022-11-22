@@ -43,7 +43,7 @@
     <!--b2 end-->
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#ffbe33">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#ffbe33; width:100%">
      <div class="container">
        <a class="navbar-brand" style="color:black; font-size:32px; font-weight:bold" href="/">Drift</a>
        {% comment %} <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,7 @@
          </form>
          <div>
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          {% if request.user.is_authenticated %}
            <li class="nav-item dropdown mx-2">
               <a class="nav-link dropdown-toggle" style="color:black; font-size:20px;" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Profile
@@ -72,9 +73,10 @@
                 {% comment %} <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
                 <li><a class="dropdown-item" href="{% url 'orders' %}">Orders</a></li>
                 <li><a class="dropdown-item" href="{% url 'changepassword' %}">Change Password</a></li> {% endcomment %}
-                <li><a class="dropdown-item" href="{% url 'LandingPage' %}">Logout</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
               </ul>
             </li>
+            {% endif %}
           </ul>
          </div>
        </div>

@@ -2,46 +2,15 @@
 {% load static %}
 {% block title %}Registration{% endblock title %}
 {% block main-content %}
-<div class="container" style="padding-top:60px;">
+<div class="container" style="padding-top:60px">
  <div class="row my-3">
   <div class="col-sm-6 offset-sm-3">
-   <div class="form-box" style="  border: 2px solid black;border-radius: 15px; padding: 20px">
+   <div class="form-box" style="border: 2px solid black;border-radius: 15px;padding: 10px;">
 		<div class="header-text" style="color: white; font-family:'Dancing Script', cursive; font-weight:bold; font-size:35px">
 			Registration Form
 		</div>
       <hr>
 
-      {% comment %} <form action="" method="post" novalidate class="shadow p-5"  style="color: black; font-family:'Copperplate'; font-size:30px">
-         {% csrf_token %}
-             <label for="name">Username</label>
-             <input type="text" id="name" name="name" placeholder="Username" style="border-radius:20px;height:45px; width:400px">
-             <br><label for="email">Email</label>
-             <input type="email" id="email" name="email" placeholder="Email" style="border-radius:20px;height:45px; width:400px">
-             <label for="number">PhoneNumber</label>
-             <input type="text" id="number" name="number" placeholder="PhoneNumber" style="border-radius:20px;height:45px; width:400px">
-             <br><label for="Password">Password</label>
-             <input type="Password" id="password" name="password" placeholder="Password" style="border-radius:20px;height:45px; width:400px">
-             <br><label for="CPassword">ConfirmPassword</label>
-             <input type="Password" id="cpassword" name="cpassword" placeholder="Confirm Password" style="border-radius:20px;height:45px; width:400px">
-         <br>
-         <input type="submit" value="Register" style="display: inline-block;padding: 8px 30px;background-color: #ffbe33;color: black;
-         border-radius: 45px;-webkit-transition: all 0.3s;transition: all 0.3s;border: none;">
-         
-         <a href="#" class="btn btn-warning btn-social btn-google"
-         style="padding: 18px 30px;background-color: #ffbe33;color: black;border-radius: 45px; font-size:18px;
-         -webkit-transition: all 0.3s;transition: all 0.3s;border: none;"> <span class="fa fa-google-plus"></span> Google </a> 
-         <br>
-         
-         <div class="text-center text-primary fw-bold">
-            <small>Existing User? <a href="#" class="text-danger"> Login Now</a></smaill>
-         </div>
-         <br>
-         {% if form.non_field_errors %}
-             {% for error in form.non_field_errors %}
-                 <p class="alert alert-danger my-3">{{error}}</p>
-             {% endfor %}
-         {% endif %}
-        </form> {% endcomment %}
       <form action="" method="post" style="color: white; font-family:'Copperplate'; font-size:30px">
       {% if messages %}
          {% for message in messages %}
@@ -63,7 +32,7 @@
          <br>
          
          <div class="text-center text-primary fw-bold">
-            <small>Existing User? <a href="#" class="text-danger"> Login Now</a></smaill>
+            {% comment %} <small>Existing User? <a href="{% url 'login' %}" class="text-danger"> Login Now</a></smaill> {% endcomment %}
          </div>
          {% if form.non_field_errors %}
          {% for error in form.non_field_errors %}

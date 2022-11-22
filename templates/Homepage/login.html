@@ -3,11 +3,9 @@
 {% block title %}Login{% endblock title %}
 {% block main-content %}
 <div class="container">
- <div class="row my-3">
+ <div class="row my-3" style="padding-top:60px;">
   <div class="col-sm-6 offset-sm-3">
-   <div class="form-box" style="  border: 2px solid black;
-   border-radius: 15px;
-   padding: 10px;">
+   <div class="form-box" style="  border: 2px solid black;border-radius: 15px;padding: 10px;">
 		<div class="header-text" style="color: white; font-family:'Dancing Script', cursive; font-weight:bold; font-size:35px">
 			Login Form
 		</div>
@@ -22,7 +20,6 @@
         <small><a href="#">Forgot Password ?</a></small> <br>    
         <input type="submit" style="display: inline-block;padding: 8px 30px;background-color: #ffbe33;
         color:black;border-radius: 45px;-webkit-transition: all 0.3s;transition: all 0.3s;border: none;" value="Login"> <br>
-        {% comment %} <a href="#" class="btn btn-danger mt-4 btn-social btn-google"> <span class="fa fa-google-plus"></span> Google </a>  {% endcomment %}
         <br>
         <div class="text-center fw-bold" style="font-weight:bold; color:white; font-size:20px"><small>New to DRIFT? 
             <a href="{% url 'registration' %}" class="text-danger" style="font-weight:bold;font-size:20px">Create an Account</a> </small></div>
