@@ -10,6 +10,7 @@ urlpatterns = [
     # path('garagelist/', views.garagelist , name='garagelist'),
     # path('log2/', views.Log2Page , name='log2'),
     path('home/', views.HomePage , name='home'),
+    path('profile/', views.ProfilePage , name='profile'),
     # # path('userprofile/', views.UserProfileView.as_view(), name='userprofile'),
     # path('profile/', views.UserProfile , name='profile'),
     path('registration/',views.RegistrationView.as_view(), name='registration'),
@@ -19,7 +20,7 @@ urlpatterns = [
     # path('garagereg/',views.GarageView.as_view(), name='garagereg'),
     path('accounts/login/', auth_views.LoginView.as_view(template_name='Homepage/login.html', authentication_form=LoginForm), name='login'),
     path('passwordchange/', auth_views.PasswordChangeView.as_view(template_name='Homepage/changepassword.html',
-    form_class=MyPasswordChangeForm, success_url='/passwordchangedone/'), name='passwordchange'),
+    form_class=MyPasswordChangeForm, success_url='/passwordchangedone/'), name='changepassword'),
 
     path('passwordchangedone/',auth_views.PasswordChangeDoneView.as_view(template_name='Homepage/passwordchangedone.html'),name='passwordchangedone'),
 

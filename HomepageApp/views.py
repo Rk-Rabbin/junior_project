@@ -12,6 +12,9 @@ from django.contrib.auth import authenticate, login
 def LandingPage(request):
     return render(request, 'Homepage/LandingPage.html')
 
+def ProfilePage(request):
+    return render(request, 'Homepage/profile.html')
+
 def garagelist(request):
     return render(request,'Homepage/garagelist.html')
 
