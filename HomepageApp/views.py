@@ -1,19 +1,23 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .forms import RegistrationForm, VehicleForm, LoginForm
+from .forms import RegistrationForm, VehicleOwnForm, LoginForm, GarageOwnForm
 # from .forms import RegistrationForm, GarageForm, VehicleForm, RentalForm, ReviewsForm, Logform
-# from .models import User, Garage, Reviews, Vehicle, rentals, Customer
+from .models import User, Garage, Reviews, Vehicle, VehicleOwner, GarageOwner
 # from .forms import MyPasswordChangeForm, MyPasswordResetForm, MySetPasswordForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.views.decorators.cache import cache_control
+
+
 # Create your views here.
 
 def LandingPage(request):
     return render(request, 'Homepage/LandingPage.html')
 
 def ProfilePage(request):
-    return render(request, 'Homepage/profile.html')
+    usr = request.user
+    return render(request, 'Homepage/profile.html',{'usr':usr,'active':'btn-warning'})
 
 def garagelist(request):
     return render(request,'Homepage/garagelist.html')
@@ -21,8 +25,12 @@ def garagelist(request):
 def UserProfile(request):
     return render(request, 'Homepage/userprofile.html')
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def HomePage(request):
-    return render(request, 'Homepage/home.html')
+    if request.user is not None:
+            return render(request, 'Homepage/home.html')
+    else:
+        return redirect('LoginView')
 
 class RegistrationView(View):
     def get(self,request):
@@ -39,9 +47,8 @@ class RegistrationView(View):
         return render(request, 'Homepage/register.html' , {'form':form})
         
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def LoginView(request):
-    # if request.user.is_authenticated:
-    #     return render(request, 'Homeapp/home.html')
     if request.method == "POST":
         email = request.POST['email']
         password = request.POST['password']
@@ -58,66 +65,35 @@ def LoginView(request):
         return render(request, 'Homepage/login.html', {'form':form})
 
 
-# class RentalView(View):
-#     def get(self,request):
-#         form = RentalForm()
-#         return render(request, 'Homepage/rent.html' , {'form':form})
-#     def post(self, request):
-#         form = RentalForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Congratulations!! Successfully Registered')
-#         return render(request, 'Homepage/rent.html' , {'form':form})
-
-# class ReviewView(View):
-#     def get(self,request):
-#         form = ReviewsForm()
-#         return render(request, 'Homepage/review.html' , {'form':form})
-#     def post(self, request):
-#         form = ReviewsForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Congratulations!! Successfully Registered')
-#         return render(request, 'Homepage/review.html' , {'form':form})
-
-class VehicleView(View):
+class VehicleOwnView(View):
     def get(self,request):
-        form = VehicleForm()
-        return render(request, 'Homepage/vehicle.html' , {'form':form})
+        form = VehicleOwnForm()
+        return render(request, 'Homepage/vehicleOwnReg.html' , {'form':form})
     def post(self, request):
-        form = VehicleForm(request.POST)
+        form = VehicleOwnForm(request.POST)
         if form.is_valid():
-            form.save()
+            usr = request.user
+            uid = usr.id
+            number = form.cleaned_data['number']
+            reg = VehicleOwner(users_id=uid, number=number)
+            reg.save()
             messages.success(request, 'Congratulations!! Successfully Registered')
-        return render(request, 'Homepage/vehicle.html' , {'form':form})
+        return render(request, 'Homepage/vehicleOwnReg.html' , {'form':form})
 
-# class GarageView(View):
-#     def get(self,request):
-#         form = GarageForm()
-#         return render(request, 'Homepage/garage.html' , {'form':form})
-#     def post(self, request):
-#         form = GarageForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Congratulations!! Successfully Registered')
-#         return render(request, 'Homepage/garage.html' , {'form':form})
+class GarageOwnView(View):
+    def get(self,request):
+        form = GarageOwnForm()
+        return render(request, 'Homepage/garageOwnReg.html' , {'form':form})
+    def post(self, request):
+        form = GarageOwnForm(request.POST)
+        if form.is_valid():
+            usr = request.user
+            uid = usr.id
+            number = form.cleaned_data['number']
+            reg = GarageOwner(users_id=uid, number=number)
+            reg.save()
+            messages.success(request, 'Congratulations!! Successfully Registered')
+        return render(request, 'Homepage/garageOwnReg.html' , {'form':form})
 
 
 
-# def Log2Page(request):
-#     if request.method == 'POST':
-#         form = Logform(request.POST)
-#         if form.is_valid():
-#             cd = form.cleaned_data()
-#             user = authenticate(request,username=cd['username'],password=cd['password'])
-#             if user is not None:
-#                 if user.is_active:
-#                     login(request,user)
-#                     return render(request,'Homapage/home.html')
-#                 else:
-#                     return HttpResponse("Inactive Account")
-#             else:
-#                 return HttpResponse("Invalid Login")
-#     else:
-#         form = Logform()
-#         return render(request,'Homepage/login.html',{'form':form})

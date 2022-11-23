@@ -2,7 +2,7 @@ from logging import PlaceHolder
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm, PasswordChangeForm, PasswordResetForm, UsernameField
 from django.utils.translation import gettext, gettext_lazy as _
-from .models import Vehicle,Garage, Reviews, Rentals
+from .models import Vehicle,Garage, Reviews, Rentals, VehicleOwner, GarageOwner
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth import password_validation
@@ -60,13 +60,20 @@ class MySetPasswordForm(SetPasswordForm):
 #                     'upload':forms.FileInput(attrs={'class':'form-control'}),
 # }
 
-class VehicleForm(forms.ModelForm):
+class VehicleOwnForm(forms.ModelForm):
     class Meta:
-        model = Vehicle
-        fields = ['type', 'vehicle_num']
+        model = VehicleOwner
+        fields = ['number']
         widgets = {
-                    'vehicle_num':forms.TextInput(attrs={'class':'form-control'}),
-                    'type':forms.Select(attrs={'class':'regDropDown'})
+                    'number':forms.TextInput(attrs={'class':'form-control'})
+                    }
+        
+class GarageOwnForm(forms.ModelForm):
+    class Meta:
+        model = GarageOwner
+        fields = ['number']
+        widgets = {
+                    'number':forms.TextInput(attrs={'class':'form-control'})
                     }
 
 # class ReviewsForm(forms.ModelForm):
