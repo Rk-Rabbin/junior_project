@@ -32,11 +32,10 @@ class Vehicle(models.Model):
 
 class Garage(models.Model):
     garage_owner = models.ForeignKey(GarageOwner, on_delete=models.CASCADE)
-    garage_num = models.CharField(max_length=200, primary_key=True)
     address = models.CharField(max_length=200)
     description = models.TextField()
     area = models.CharField(max_length=200)
-    available = models.CharField(max_length=200)
+    available = models.CharField(max_length=2, default='1')
     space = models.CharField(max_length=200)
     hourlyprice = models.FloatField()
     monthlyprice = models.FloatField()
@@ -49,11 +48,11 @@ policy = (
     ('Daily','Daily')
 )
 
-class Rentals(models.Model):
-    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
-    garage = models.ForeignKey(Garage, on_delete=models.CASCADE)
-    policy = models.CharField(choices=policy, default='choose one', max_length=30)
-    rental_date = models.DateTimeField(auto_now_add=True)
+# class Rentals(models.Model):
+#     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
+#     garage = models.ForeignKey(Garage, on_delete=models.CASCADE)
+#     policy = models.CharField(choices=policy, default='choose one', max_length=30)
+#     rental_date = models.DateTimeField(auto_now_add=True)
 
 class Reviews(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

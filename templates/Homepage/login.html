@@ -11,6 +11,11 @@
 		</div>
       <hr>
       <form action="" method="post" novalidate class="shadow p-5"  style="color: white; font-family:'Copperplate'; font-size:30px">
+        {% if messages %}
+         {% for message in messages %}
+               <p {% if message.tags %}class="alert alert-{{message.tags}} mb-5"{% endif %}>{{message}}</p>
+         {% endfor %}
+        {% endif %}
         {% csrf_token %}
          {% for fm in form %}
          <div class="form-group">
@@ -19,7 +24,11 @@
          {% endfor %}
         <small><a href="{% url 'password_reset' %}">Forgot Password ?</a></small> <br>    
         <input type="submit" style="display: inline-block;padding: 8px 30px;background-color: #ffbe33;
-        color:black;border-radius: 45px;-webkit-transition: all 0.3s;transition: all 0.3s;border: none;" value="Login"> <br>
+        color:black;border-radius: 45px;-webkit-transition: all 0.3s;transition: all 0.3s;border: none;" value="Login">
+
+        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-warning btn-social btn-google"
+        style="padding: 18px 30px;background-color: #ffbe33;color: black;border-radius: 45px; font-size:18px;
+        -webkit-transition: all 0.3s;transition: all 0.3s;border: none;"> <span class="fa fa-google-plus"></span> Google </a> 
         <br>
         <div class="text-center fw-bold" style="font-weight:bold; color:white; font-size:20px"><small>New to DRIFT? 
             <a href="{% url 'registration' %}" class="text-danger" style="font-weight:bold;font-size:20px">Create an Account</a> </small></div>

@@ -2,7 +2,7 @@ from logging import PlaceHolder
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm, PasswordChangeForm, PasswordResetForm, UsernameField
 from django.utils.translation import gettext, gettext_lazy as _
-from .models import Vehicle,Garage, Reviews, Rentals, VehicleOwner, GarageOwner
+from .models import Vehicle,Garage, Reviews, VehicleOwner, GarageOwner
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth import password_validation
@@ -47,18 +47,29 @@ class MySetPasswordForm(SetPasswordForm):
     new_password2 = forms.CharField(label=_("Confirm New Password"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete':'new-password',
     'class':'form-control'}))
 
-# class GarageForm(forms.ModelForm):
-#     class Meta:
-#         model = Garage
-#         fields = ['name','address','description','hourlyprice','monthlyprice','dailyprice','upload' ]
-#         widgets = {'name':forms.TextInput(attrs={'class':'form-control'}),
-#                     'address':forms.TextInput(attrs={'class':'form-control'}),
-#                     'description':forms.Textarea(attrs={'class':'form-control'}),
-#                     'hourlyprice':forms.TextInput(attrs={'class':'form-control'}),
-#                     'monthlyprice':forms.TextInput(attrs={'class':'form-control'}),
-#                     'dailyprice':forms.TextInput(attrs={'class':'form-control'}),
-#                     'upload':forms.FileInput(attrs={'class':'form-control'}),
-# }
+class GarageForm(forms.ModelForm):
+    class Meta:
+        model = Garage
+        fields = ['address','description','area', 'space' ,'hourlyprice','monthlyprice','dailyprice','upload' ]
+        widgets = {'address':forms.TextInput(attrs={'class':'form-control'}),
+                    'area':forms.TextInput(attrs={'class':'form-control'}),
+                    'space':forms.TextInput(attrs={'class':'form-control'}),
+                    'description':forms.Textarea(attrs={'class':'form-control'}),
+                    'hourlyprice':forms.TextInput(attrs={'class':'form-control'}),
+                    'monthlyprice':forms.TextInput(attrs={'class':'form-control'}),
+                    'dailyprice':forms.TextInput(attrs={'class':'form-control'}),
+                    'upload':forms.FileInput(attrs={'class':'form-control'}),
+}
+
+class VehicleForm(forms.ModelForm):
+    # vehicle_num = forms.CharField(label="Vehicle Number", required=True)
+    # type = forms.ChoiceField(label="Vehicle Type", choices=[vehicleType])
+    class Meta:
+        model = Vehicle
+        fields = ['vehicle_num', 'type']
+        widgets = {'type':forms.Select(attrs={'class':'regDropDown'}),
+                    'vehicle_num':forms.TextInput(attrs={'class':'form-control'}),
+                    }
 
 class VehicleOwnForm(forms.ModelForm):
     class Meta:

@@ -13,6 +13,8 @@ urlpatterns = [
     # # path('userprofile/', views.UserProfileView.as_view(), name='userprofile'),
     # path('profile/', views.UserProfile , name='profile'),
     path('registration/',views.RegistrationView.as_view(), name='registration'),
+    path('garage-reg/',views.GarageRegView.as_view(), name='garage-reg'),
+    path('vehicle-reg/',views.VehicleRegView.as_view(), name='vehicle-reg'),
     # path('review/',views.ReviewView.as_view(), name='review'),
     path('vehicle-owner/',views.VehicleOwnView.as_view(), name='vehicleown'),
     path('garage-owner/',views.GarageOwnView.as_view(), name='garageown'),
@@ -36,4 +38,4 @@ urlpatterns = [
 
     path('password-reset-confirm/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='Homepage/password_reset_confirm.html',
     form_class=MySetPasswordForm), name='password_reset_confirm'),
-]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

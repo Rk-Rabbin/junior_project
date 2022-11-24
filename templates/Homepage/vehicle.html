@@ -2,6 +2,7 @@
 {% load static %}
 {% block title %}Vehicle Register{% endblock title %}
 {% block main-content %}
+<div style="padding-top:80px">
 <div class="container">
  <div class="row my-3">
   <div class="col-sm-6 offset-sm-3">
@@ -11,13 +12,16 @@
 		</div>
       <hr>
       <form action="" method="post" novalidate class="shadow p-5"  style="color: black; font-family:'Copperplate'; font-size:30px">
+        {% if messages %}
+         {% for message in messages %}
+               <p {% if message.tags %}class="alert alert-{{message.tags}} mb-5"{% endif %}>{{message}}</p>
+         {% endfor %}
+        {% endif %}
         {% csrf_token %}
-            <label for="fname">Email</label>
-            <input type="Email" id="vnum" name="vnum" placeholder="Email" style="border-radius:20px;height:45px; width:400px">
             <br><label for="fname">Vehicle Number</label>
-            <input type="text" id="gnum" name="vnum" placeholder="Vehicle Number" style="border-radius:20px;height:45px; width:400px">
-            <br><label for="plans">Vehicle Type:</label><br>
-            <select name="plans" id="plans" style="font-size:0px">
+            <input type="text" id="vnum" name="vnum" placeholder="Vehicle Number" style="border-radius:20px;height:45px; width:400px">
+            <br><label for="type">Vehicle Type:</label><br>
+            <select name="type" id="type" style="font-size:0px">
                 <option value="Car">Car</option>
                 <option value="Bus">Bus</option>
                 <option value="Truck">Truck</option>
@@ -39,4 +43,5 @@
       </div>
      </div>
     </div>
+</div>
     {% endblock main-content %}
