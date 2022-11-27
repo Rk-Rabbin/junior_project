@@ -49,23 +49,6 @@ class RegistrationView(View):
         return render(request, 'Homepage/register.html' , {'form':form})
         
 
-# @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-# def LoginView(request):
-#     if request.method == "POST":
-#         email = request.POST['email']
-#         password = request.POST['password']
-#         user = authenticate(request, email=email, password=password)
-#         if user is not None:
-#             login(request, user)
-#             return render(request, 'Homeapp/home.html',{'user':user})
-#         else:
-#             messages.success(request, 'Something went wrong, Try Again')
-#             form = LoginForm()
-#             return render(request, 'Homepage/login.html', {'form':form, 'message':messages})
-#     else:
-#         form = LoginForm()
-#         return render(request, 'Homepage/login.html', {'form':form})
-
 
 class VehicleOwnView(View):
     def get(self,request):
