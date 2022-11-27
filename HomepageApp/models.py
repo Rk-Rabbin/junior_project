@@ -32,6 +32,7 @@ class Vehicle(models.Model):
 
 class Garage(models.Model):
     garage_owner = models.ForeignKey(GarageOwner, on_delete=models.CASCADE)
+    garage_id = models.AutoField(primary_key=True)
     address = models.CharField(max_length=200)
     description = models.TextField()
     area = models.CharField(max_length=200)

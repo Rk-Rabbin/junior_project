@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
 from .forms import RegistrationForm, VehicleOwnForm, LoginForm, GarageOwnForm, GarageForm, VehicleForm
 # from .forms import RegistrationForm, GarageForm, VehicleForm, RentalForm, ReviewsForm, Logform
 from .models import User, Garage, Reviews, Vehicle, VehicleOwner, GarageOwner
@@ -132,3 +132,54 @@ class VehicleRegView(View):
             reg.save()
             messages.success(request, 'Congratulations!! Successfully Registered your vehicle')
             return render(request, 'Homepage/vehicle.html', {'message':messages})
+
+def mygarage(request):
+    usr = request.user
+    uid = usr.id
+    try:
+        g_own = GarageOwner.objects.get(users_id=uid)
+        gid = g_own.id
+        mg = Garage.objects.filter(garage_owner=gid)
+        return render(request, 'Homepage/mygarage.html',{'mg':mg})
+    except GarageOwner.DoesNotExist:
+        return render(request, 'Homepage/mygarage.html',{'mg':mg})
+
+
+def myvehicle(request):
+    usr = request.user
+    uid = usr.id
+    try:
+        v_own = VehicleOwner.objects.get(users_id = uid)
+        vid = v_own.id
+        mv = Vehicle.objects.filter(vehicle_owner=vid)
+        return render(request, 'Homepage/myvehicle.html',{'mv':mv})
+    except:
+        return render(request, 'Homepage/myvehicle.html',{'mv':mv})
+
+
+def updategarage(request):
+    return render(request, 'Homepage/updategarage.html')
+
+def updatevehicle(request):
+    return render(request, 'Homepage/updatevehicle.html')
+
+def del_vehicle(request, vehicle_num):
+    if request.method == 'POST':
+        try:
+            dl = Vehicle.objects.get(vehicle_num=vehicle_num)
+            dl.delete()
+            return render(request, 'Homepage/myvehicle.html')
+        except:
+            messages.warning("could not delete vehicle!!")
+            return render(request, 'Homepage/myvehicle.html',{'message':messages})
+
+
+def del_garage(request, garage_id):
+    if request.method == 'POST':
+        try:
+            dl = Garage.objects.get(garage_id=garage_id)
+            dl.delete()
+            return render(request, 'Homepage/mygarage.html')
+        except:
+            messages.warning("could not delete garage!!")
+            return render(request, 'Homepage/mygarage.html',{'message':messages})
