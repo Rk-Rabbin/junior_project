@@ -2,9 +2,18 @@
 {% load static %}
 {% block title %}Update Garage{% endblock title %}
 {% block main-content %}
-<div class="container mt-5">
+<div class="container mt-5" style="padding-top:110px; padding-bottom:15px">
     <h2 class="text-center alert alert-danger">Update Garage</h2>
-    
+    {% if messages %}
+    {% for message in messages %}
+          <p {% if message.tags %}class="alert alert-{{message.tags}} mb-5"{% endif %}>{{message}}</p>
+    {% endfor %}
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" class="btn btn-success" value="Update">
+    </form>   
 </div>   
 {% endblock main-content %}
 

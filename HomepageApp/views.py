@@ -20,9 +20,6 @@ def ProfilePage(request):
     usr = request.user
     return render(request, 'Homepage/profile.html',{'usr':usr,'active':'btn-warning'})
 
-def garagelist(request):
-    return render(request,'Homepage/garagelist.html')
-
 def UserProfile(request):
     return render(request, 'Homepage/userprofile.html')
 
@@ -157,11 +154,41 @@ def myvehicle(request):
         return render(request, 'Homepage/myvehicle.html',{'mv':mv})
 
 
-def updategarage(request):
-    return render(request, 'Homepage/updategarage.html')
+def updategarage(request, garage_id):
+    if request.method == 'POST':
+        try:
+            dl = Garage.objects.get(garage_id=garage_id)
+            fm = GarageForm(request.POST, instance=dl)
+            if fm.is_valid():
+                fm.save()
+                return redirect('mygarage')
+        except:
+            messages.warning("sorry, could not update garage information!!")
+            return render(request, 'Homepage/mygarage.html',{'message':messages})
+    else:
+        dl = Garage.objects.get(garage_id=garage_id)
+        fm = GarageForm(instance=dl)
+    return render(request, 'Homepage/updategarage.html', {'form':fm})
 
-def updatevehicle(request):
-    return render(request, 'Homepage/updatevehicle.html')
+
+
+def updatevehicle(request, vehicle_num):
+    if request.method == 'POST':
+        try:
+            dl = Vehicle.objects.get(vehicle_num=vehicle_num)
+            fm = VehicleForm(request.POST, instance=dl)
+            if fm.is_valid():
+                fm.save()
+                return redirect('myvehicle')
+        except:
+            messages.warning("sorry, could not update garage information!!")
+            return render(request, 'Homepage/myvehicle.html',{'message':messages})
+    else:
+        dl = Vehicle.objects.get(vehicle_num=vehicle_num)
+        fm = VehicleForm(instance=dl)
+    return render(request, 'Homepage/updatevehicle.html', {'form':fm})
+
+
 
 def del_vehicle(request, vehicle_num):
     if request.method == 'POST':
@@ -183,3 +210,10 @@ def del_garage(request, garage_id):
         except:
             messages.warning("could not delete garage!!")
             return render(request, 'Homepage/mygarage.html',{'message':messages})
+
+
+def search_view(request):
+    search = request.GET['search']
+    garages = Garage.objects.filter(area__icontains=search)
+    params = {'garages':garages}
+    return render(request,'Homepage/garagelist.html', params)

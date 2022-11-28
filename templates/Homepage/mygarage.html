@@ -34,7 +34,7 @@
                 <td>{{mg.monthlyprice}}</td>
                 <td>{{mg.space}}</td>
                 <td>
-                <a href="#" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'updategarage' mg.garage_id %}" class="btn btn-warning btn-sm">Edit</a>
                 <form action="{% url 'del_garage' mg.garage_id %}" method="post" class="d-inline">
                     {% csrf_token %}
                     <input type="submit" class="btn btn-danger" value="Delete">
