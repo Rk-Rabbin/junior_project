@@ -2,37 +2,25 @@
 {% load static %}
 {% block title %}Rent{% endblock title %}
 {% block main-content %}
-<div class="container">
- <div class="row my-3">
-  <div class="col-sm-6 offset-sm-3">
-   <div class="form-box" style="  border: 2px solid black;border-radius: 15px;padding: 10px;">
-		<div class="header-text" style="color: black; font-family:'Dancing Script', cursive; font-weight:bold; font-size:35px">
-			Rental Form
-		</div>
-      <hr>
-      <form action="" method="post" novalidate class="shadow p-5"  style="color: black; font-family:'Copperplate'; font-size:30px">
-        {% csrf_token %}
-            <label for="fname">Vehicle Number</label>
-            <input type="text" id="vnum" name="vnum" placeholder="Vehicle Number" style="border-radius:20px;height:45px; width:400px">
-            <br><label for="fname">Garage Number</label>
-            <input type="text" id="gnum" name="gnum" placeholder="Garage Number" style="border-radius:20px;height:45px; width:400px">
-            <br><label for="plans">Choose a plan:</label><br>
-            <select name="plans" id="plans" style="font-size:0px">
-                <option value="Hourly">Hourly</option>
-                <option value="Daily">Daily</option>
-                <option value="Monthly">Monthly</option>
-            </select>
-        <br>
-         <input type="submit" style="display: inline-block;padding: 8px 30px;background-color: #ffbe33;color:black;border-radius: 45px;
-         -webkit-transition: all 0.3s;transition: all 0.3s;border: none; margin-top:50px; margin-left:150px" value="Rent"> <br>
-        <br>
-        {% if form.non_field_errors %}
-            {% for error in form.non_field_errors %}
-                <p class="alert alert-danger my-3">{{error}}</p>
-            {% endfor %}
-        {% endif %}
-       </form>
+<div class="rk" style="padding-top:60px">
+    <div class="container my-5">
+     <div class="row">
+      <div class="col-sm-6 text-center align-self-center">
+       <img src="{{garage.upload.url}}" alt="" class="img-fluid img-thumbnail">
       </div>
-     </div>
+      <div class="col-sm-5 offset-sm-1">
+        <h2>Garage Id: {{garage.garage_id}} || Owner Id: {{garage.garage_owner_id}}</h2>
+        <hr>
+        <p>Garage Description: {{garage.description}}</p> <br>
+        <p>Garage Space: {{garage.space}}</p> <br>
+        <p>Garage Address: {{garage.address}}</p> <br>
+        <p>Garage Area: {{garage.area}}</p> <br>
+        <p>Owner Number: {{owner.number}}</p> <br>
+        <h4>Hourly Price: {{garage.hourlyprice}}</h4> <br>
+        <h4>Daily Price: {{garage.dailyyprice}}</h4> <br>
+        <h4>Monthly Price: {{garage.monthlyprice}}</h4> <br>
+        <a href="#" class="btn btn-danger shadow px-5 py-2 ms-4">Rent Now</a>
+        </div>
+    </div>
     </div>
     {% endblock main-content %}

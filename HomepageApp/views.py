@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 # Create your views here.
@@ -16,10 +17,14 @@ from django.contrib.auth.decorators import login_required
 def LandingPage(request):
     return render(request, 'Homepage/LandingPage.html')
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
 def ProfilePage(request):
     usr = request.user
     return render(request, 'Homepage/profile.html',{'usr':usr,'active':'btn-warning'})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
 def UserProfile(request):
     return render(request, 'Homepage/userprofile.html')
 
@@ -46,7 +51,7 @@ class RegistrationView(View):
         return render(request, 'Homepage/register.html' , {'form':form})
         
 
-
+@method_decorator(login_required, name='dispatch')
 class VehicleOwnView(View):
     def get(self,request):
         form = VehicleOwnForm()
@@ -63,6 +68,7 @@ class VehicleOwnView(View):
         return render(request, 'Homepage/vehicleOwnReg.html' , {'form':form})
 
 
+@method_decorator(login_required, name='dispatch')
 class GarageOwnView(View):
     def get(self,request):
         form = GarageOwnForm()
@@ -79,6 +85,7 @@ class GarageOwnView(View):
         return render(request, 'Homepage/garageOwnReg.html' , {'form':form})
 
 
+@method_decorator(login_required, name='dispatch')
 class GarageRegView(View):
     def get(self,request):
         form = GarageForm()
@@ -109,6 +116,8 @@ class GarageRegView(View):
             messages.success(request, 'Congratulations!! Successfully Registered your garage')
         return render(request, 'Homepage/garage.html' , {'form':form})
 
+
+@method_decorator(login_required, name='dispatch')
 class VehicleRegView(View):
     def get(self,request):
         return render(request, 'Homepage/vehicle.html')
@@ -130,6 +139,9 @@ class VehicleRegView(View):
             messages.success(request, 'Congratulations!! Successfully Registered your vehicle')
             return render(request, 'Homepage/vehicle.html', {'message':messages})
 
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
 def mygarage(request):
     usr = request.user
     uid = usr.id
@@ -141,7 +153,8 @@ def mygarage(request):
     except GarageOwner.DoesNotExist:
         return render(request, 'Homepage/mygarage.html',{'mg':mg})
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
 def myvehicle(request):
     usr = request.user
     uid = usr.id
@@ -151,9 +164,10 @@ def myvehicle(request):
         mv = Vehicle.objects.filter(vehicle_owner=vid)
         return render(request, 'Homepage/myvehicle.html',{'mv':mv})
     except:
-        return render(request, 'Homepage/myvehicle.html',{'mv':mv})
+        return render(request, 'Homepage/myvehicle.html')
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
 def updategarage(request, garage_id):
     if request.method == 'POST':
         try:
@@ -171,7 +185,8 @@ def updategarage(request, garage_id):
     return render(request, 'Homepage/updategarage.html', {'form':fm})
 
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
 def updatevehicle(request, vehicle_num):
     if request.method == 'POST':
         try:
@@ -189,7 +204,8 @@ def updatevehicle(request, vehicle_num):
     return render(request, 'Homepage/updatevehicle.html', {'form':fm})
 
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
 def del_vehicle(request, vehicle_num):
     if request.method == 'POST':
         try:
@@ -201,6 +217,8 @@ def del_vehicle(request, vehicle_num):
             return render(request, 'Homepage/myvehicle.html',{'message':messages})
 
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
 def del_garage(request, garage_id):
     if request.method == 'POST':
         try:
@@ -212,8 +230,24 @@ def del_garage(request, garage_id):
             return render(request, 'Homepage/mygarage.html',{'message':messages})
 
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
 def search_view(request):
     search = request.GET['search']
-    garages = Garage.objects.filter(area__icontains=search)
-    params = {'garages':garages}
-    return render(request,'Homepage/garagelist.html', params)
+    if len(search)>0:
+        garages = Garage.objects.filter(area__icontains=search)
+        params = {'garages':garages}
+        return render(request,'Homepage/garagelist.html', params)
+    else:
+        return render(request,'Homepage/garagelist.html')
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
+def rent_view(request, garage_id):
+    garage = Garage.objects.get(garage_id=garage_id)
+    owner = GarageOwner.objects.get(id=garage.garage_owner_id)
+    return render(request, 'Homepage/rent.html',{'garage':garage, 'owner':owner})
+
+def checkout(request):
+    return render(request, 'Homeapp/checkout.html')

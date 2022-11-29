@@ -5,14 +5,15 @@
 <div class="wrapper" style="padding-top:73px">
 	<div class="header">Search results for nearby garages</div>
 	{% if garages %}
-	{% for garages in garages %}
 	<div class="cards_wrap">
+		{% for garages in garages %}
 		<div class="card_item">
 			<div class="card_inner">
-				<img src="black_panther.png">
+				<img src="{{garages.upload.url}}">
 				<div class="role_name" style="font-weight:800;font-size: 15px;">Garage Id : {{garages.garage_id}}</div>
 				<div class="role_name" style="font-weight:800;font-size: 15px;">Owner Id : {{garages.garage_owner_id}}</div>
 				<div class="role_name" style="font-weight:800;font-size: 15px;">Address : {{garages.address}}</div>
+				<div class="role_name" style="font-weight:800;font-size: 15px;">Area : {{garages.area}}</div>
 				{% if garages.available == "1" %}
 				<div class="role_name" style="font-weight:800;font-size: 15px;">Availability : Available</div>
 				{% else %}
@@ -23,9 +24,10 @@
 				<div class="role_name" style="font-weight:800;font-size: 15px;">Monthly Price : {{garages.monthlyprice}}</div>
 				<div class="film" style="font-size: 15px;">Description : {{garages.description}} </div>
 			</div>
-            <button class="btn" style="color:#ffbe33;width:100%; background-color:black; font-size:18px; border-radius:25px; margin-top:5px" type="submit">Rent</button>
+            <a class="btn" style="color:#ffbe33;width:100%; background-color:black; font-size:18px; border-radius:25px; 
+			margin-top:5px" type="submit" href="{% url 'rent' garages.garage_id %}">Rent</a>
 		</div>
-	{% endfor %}
+		{% endfor %}
 	</div>
 	{% else %}
 	<h4 class="text-center alert alert-danger"> No Garages Found</h4>

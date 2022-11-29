@@ -26,7 +26,7 @@
                 <td>{{mv.type}}</td>
                 <td>{{mv.vehicle_num}}</td>
                 <td>
-                <a href="{% url 'updatevehicle' mv.vehicle_num %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'updatevehicle' mv.vehicle_num %}" class="btn btn-warning btn-sm" style="height:37px">Edit</a>
                 <form action="{% url 'del_vehicle' mv.vehicle_num %}" method="post" class="d-inline">
                     {% csrf_token %}
                     <input type="submit" class="btn btn-danger" value="Delete">
