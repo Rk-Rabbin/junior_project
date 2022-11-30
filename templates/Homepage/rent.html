@@ -19,7 +19,7 @@
         <h4>Hourly Price: {{garage.hourlyprice}}</h4> <br>
         <h4>Daily Price: {{garage.dailyyprice}}</h4> <br>
         <h4>Monthly Price: {{garage.monthlyprice}}</h4> <br>
-        <a href="#" class="btn btn-danger shadow px-5 py-2 ms-4">Rent Now</a>
+        <a href="{% url 'checkout' garage.garage_id %}" class="btn btn-danger shadow px-5 py-2 ms-4">Rent Now</a>
         </div>
     </div>
     </div>

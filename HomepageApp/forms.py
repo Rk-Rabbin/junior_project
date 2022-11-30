@@ -2,7 +2,7 @@ from logging import PlaceHolder
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm, PasswordChangeForm, PasswordResetForm, UsernameField
 from django.utils.translation import gettext, gettext_lazy as _
-from .models import Vehicle,Garage, Reviews, VehicleOwner, GarageOwner
+from .models import Vehicle,Garage, Reviews, VehicleOwner, GarageOwner, Rentals
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth import password_validation
@@ -96,14 +96,14 @@ class GarageOwnForm(forms.ModelForm):
 #                     'statement':forms.Textarea(attrs={'class':'form-control'})}
 
 
-# class RentalForm(forms.ModelForm):
-#     class Meta:
-#         model = rentals
-#         fields = ['vehicle','garage','policy']
-#         widgets = {'vehicle':forms.TextInput(attrs={'class':'form-control'}),
-#                     'garage':forms.TextInput(attrs={'class':'form-control'}),
-#                     'policy':forms.Select(attrs={'class':'regDropDown', 'style':'color:black;'}),
-#                     }
+class RentalForm(forms.ModelForm):
+    class Meta:
+        model = Rentals
+        fields = ['vehicle','garage','policy']
+        widgets = {'vehicle':forms.TextInput(attrs={'class':'form-control'}),
+                    'garage':forms.TextInput(attrs={'class':'form-control'}),
+                    'policy':forms.Select(attrs={'class':'regDropDown', 'style':'color:black;'}),
+                    }
 
 # class Logform(forms.Form):
 #     username = forms.CharField()

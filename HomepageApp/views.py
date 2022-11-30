@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
 from .forms import RegistrationForm, VehicleOwnForm, LoginForm, GarageOwnForm, GarageForm, VehicleForm
 # from .forms import RegistrationForm, GarageForm, VehicleForm, RentalForm, ReviewsForm, Logform
-from .models import User, Garage, Reviews, Vehicle, VehicleOwner, GarageOwner
+from .models import User, Garage, Reviews, Vehicle, VehicleOwner, GarageOwner, Rentals
 # from .forms import MyPasswordChangeForm, MyPasswordResetForm, MySetPasswordForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.views import View
@@ -146,12 +146,12 @@ def mygarage(request):
     usr = request.user
     uid = usr.id
     try:
-        g_own = GarageOwner.objects.get(users_id=uid)
+        g_own = GarageOwner.objects.get(users_id = uid)
         gid = g_own.id
         mg = Garage.objects.filter(garage_owner=gid)
         return render(request, 'Homepage/mygarage.html',{'mg':mg})
     except GarageOwner.DoesNotExist:
-        return render(request, 'Homepage/mygarage.html',{'mg':mg})
+        return render(request, 'Homepage/mygarage.html')
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
@@ -249,5 +249,25 @@ def rent_view(request, garage_id):
     owner = GarageOwner.objects.get(id=garage.garage_owner_id)
     return render(request, 'Homepage/rent.html',{'garage':garage, 'owner':owner})
 
-def checkout(request):
-    return render(request, 'Homeapp/checkout.html')
+def checkout(request, garage_id):
+    usr = request.user
+    uid = usr.id
+    try:
+        vo = VehicleOwner.objects.get(users_id = uid)
+        mg = Garage.objects.get(garage_id = garage_id)
+        go_id = mg.garage_owner_id
+        go = GarageOwner.objects.get(id = go_id)
+        usr2 = User.objects.get(id=go.users_id)
+        return render(request, 'Homepage/checkout.html',{'vo':vo, 'mg':mg, 'usr2':usr2})
+    except:
+        return render(request, 'Homepage/checkout.html')
+
+def rent_done(request):
+    if request.method == 'POST':
+        v = request.POST.get9('v')
+        g = request.POST.get9('g')
+        p = request.POST.get9('p')
+        rent = Rentals(vehicle=v, garage=g, policy=p)
+        rent.save()
+        messages.success("Successfully Rented")
+        return render(request, 'Homepage/rent_done.html',{'message':messages})

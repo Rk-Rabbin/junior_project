@@ -49,15 +49,15 @@ policy = (
     ('Daily','Daily')
 )
 
-# class Rentals(models.Model):
-#     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
-#     garage = models.ForeignKey(Garage, on_delete=models.CASCADE)
-#     policy = models.CharField(choices=policy, default='choose one', max_length=30)
-#     rental_date = models.DateTimeField(auto_now_add=True)
+class Rentals(models.Model):
+    vehicle = models.ForeignKey(VehicleOwner, on_delete=models.CASCADE)
+    garage = models.ForeignKey(Garage, on_delete=models.CASCADE)
+    policy = models.CharField(choices=policy, default='choose one', max_length=30)
+    rental_date = models.DateTimeField(auto_now_add=True)
 
 class Reviews(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    reviewer = models.EmailField(max_length=50) 
-    reviewed = models.EmailField(max_length=50)
+    reviewer = models.CharField(max_length=50) 
+    reviewed = models.CharField(max_length=50)
     statement = models.TextField(max_length=250)
     publish_date = models.DateTimeField(auto_now_add=True)
