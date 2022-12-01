@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
-from .forms import RegistrationForm, VehicleOwnForm, LoginForm, GarageOwnForm, GarageForm, VehicleForm
+from .forms import RegistrationForm, VehicleOwnForm, LoginForm, GarageOwnForm, GarageForm, VehicleForm, RentalForm
 # from .forms import RegistrationForm, GarageForm, VehicleForm, RentalForm, ReviewsForm, Logform
 from .models import User, Garage, Reviews, Vehicle, VehicleOwner, GarageOwner, Rentals
 # from .forms import MyPasswordChangeForm, MyPasswordResetForm, MySetPasswordForm
@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login
 from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from datetime import date
 
 
 # Create your views here.
@@ -130,7 +131,7 @@ class VehicleRegView(View):
                 vid = v_own.id
             except VehicleOwner.DoesNotExist:
                 v_own = None
-                messages.success(request, 'Congratulations!! Successfully Registered your vehicle')
+                messages.success(request, 'Sorry!! Register as an owner first')
                 return render(request, 'Homepage/vehicleOwnReg.html' , {'message':messages})
             vehicle_num = request.POST['vnum']
             type = request.POST['type']
@@ -153,6 +154,7 @@ def mygarage(request):
     except GarageOwner.DoesNotExist:
         return render(request, 'Homepage/mygarage.html')
 
+
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 def myvehicle(request):
@@ -165,6 +167,20 @@ def myvehicle(request):
         return render(request, 'Homepage/myvehicle.html',{'mv':mv})
     except:
         return render(request, 'Homepage/myvehicle.html')
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
+def myrent(request):
+    usr = request.user
+    uid = usr.id
+    try:
+        v_own = VehicleOwner.objects.get(users_id = uid)
+        vid = v_own.id
+        mv = Rentals.objects.filter(vehicle_id=vid)
+        return render(request, 'Homepage/myrent.html',{'mv':mv})
+    except:
+        return render(request, 'Homepage/myrent.html')
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
@@ -249,6 +265,8 @@ def rent_view(request, garage_id):
     owner = GarageOwner.objects.get(id=garage.garage_owner_id)
     return render(request, 'Homepage/rent.html',{'garage':garage, 'owner':owner})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
 def checkout(request, garage_id):
     usr = request.user
     uid = usr.id
@@ -258,16 +276,29 @@ def checkout(request, garage_id):
         go_id = mg.garage_owner_id
         go = GarageOwner.objects.get(id = go_id)
         usr2 = User.objects.get(id=go.users_id)
-        return render(request, 'Homepage/checkout.html',{'vo':vo, 'mg':mg, 'usr2':usr2})
+        form = RentalForm()
+        return render(request, 'Homepage/checkout.html',{'vo':vo, 'mg':mg, 'usr2':usr2, 'form':form})
     except:
         return render(request, 'Homepage/checkout.html')
 
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
 def rent_done(request):
     if request.method == 'POST':
-        v = request.POST.get9('v')
-        g = request.POST.get9('g')
-        p = request.POST.get9('p')
-        rent = Rentals(vehicle=v, garage=g, policy=p)
-        rent.save()
-        messages.success("Successfully Rented")
-        return render(request, 'Homepage/rent_done.html',{'message':messages})
+        form = RentalForm(request.POST)
+        if form.is_valid():
+            # v = request.POST.get('vehicle')
+            # g = request.POST.get('garage')
+            # p = request.POST.get('policy')
+            # r = date.today()
+            # v = request.POST.get['v']
+            # g = request.POST.get['g']
+            # p = request.POST.get['p']
+            # rent = Rentals(vehicle=v, garage=g, policy=p, rental_date=r)
+            # rent.save()
+            form.save()
+            messages.success(request, "Successfully Rented")
+            return render(request, 'Homepage/rent_done.html',{'message':messages})
+        else:
+            return HttpResponse(f"sorry {v} {g} {p}")

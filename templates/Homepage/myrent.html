@@ -1,0 +1,40 @@
+{% extends 'Homepage/base2.html' %}
+{% load static %}
+{% block title %}My Rents{% endblock title %}
+{% block main-content %}
+<div class="container mt-6" style="padding-top:110px">
+    <h2 class="text-center alert alert-warning">Previous Rents</h2>
+    {% if messages %}
+         {% for message in messages %}
+               <p {% if message.tags %}class="alert alert-{{message.tags}} mb-5"{% endif %}>{{message}}</p>
+         {% endfor %}
+      {% endif %}
+    {% if mv %} 
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Garage Id</th>
+            <th scope="col">Vehicle Owner Id</th>
+            <th scope="col">Policy</th>
+            <th scope="col">Rental Date</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for mv in mv %}
+            <tr>
+                <th scope="row">{{mv.id}}</th>
+                <td>{{mv.garage_id}}</td>
+                <td>{{mv.vehicle_id}}</td>
+                <td>{{mv.policy}}</td>
+                <td>{{mv.rental_date}}</td>
+              </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+        {% else %}
+            <h4 class="text-center alert alert-danger"> No Rents Found</h4>
+    {% endif %}
+</div>   
+{% endblock main-content %}
+

@@ -12,6 +12,7 @@ urlpatterns = [
     path('search/', views.search_view , name='search'),
     path('mygarage/', views.mygarage , name='mygarage'),
     path('myvehicle/', views.myvehicle , name='myvehicle'),
+    path('myrent/', views.myrent, name='myrent'),
     path('checkout/<garage_id>', views.checkout , name='checkout'),
     path('rent/<garage_id>',views.rent_view, name='rent'),
     path('rent_done/', views.rent_done , name='rentdone'),

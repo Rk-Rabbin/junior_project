@@ -100,8 +100,8 @@ class RentalForm(forms.ModelForm):
     class Meta:
         model = Rentals
         fields = ['vehicle','garage','policy']
-        widgets = {'vehicle':forms.TextInput(attrs={'class':'form-control'}),
-                    'garage':forms.TextInput(attrs={'class':'form-control'}),
+        widgets = {'vehicle':forms.TextInput(attrs={'class':'form-control','placeholder':'Vehicle Owner Id'}),
+                    'garage':forms.TextInput(attrs={'class':'form-control', 'placeholder':'Garage Id'}),
                     'policy':forms.Select(attrs={'class':'regDropDown', 'style':'color:black;'}),
                     }
 
