@@ -1,8 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect, HttpResponseRedirect
-from .forms import RegistrationForm, VehicleOwnForm, LoginForm, GarageOwnForm, GarageForm, VehicleForm, RentalForm
-# from .forms import RegistrationForm, GarageForm, VehicleForm, RentalForm, ReviewsForm, Logform
+from .forms import RegistrationForm, VehicleOwnForm, LoginForm, GarageOwnForm, GarageForm, VehicleForm, RentalForm, ReviewsForm
 from .models import User, Garage, Reviews, Vehicle, VehicleOwner, GarageOwner, Rentals
-# from .forms import MyPasswordChangeForm, MyPasswordResetForm, MySetPasswordForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.views import View
 from django.contrib import messages
@@ -179,6 +177,7 @@ def myrent(request):
         vid = v_own.id
         mv = Rentals.objects.filter(vehicle_id=vid)
         return render(request, 'Homepage/myrent.html',{'mv':mv})
+        # return render(request, 'Homepage/myrent.html',{'mg':mg})
     except:
         return render(request, 'Homepage/myrent.html')
 
@@ -248,6 +247,19 @@ def del_garage(request, garage_id):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
+def myreviews(request):
+    usr = request.user
+    uid = usr.id
+    try:
+        rev = Reviews.objects.filter(user_id = uid)
+        return render(request, 'Homepage/myreviews.html',{'rev':rev})
+    except:
+        return render(request, 'Homepage/myreviews.html')
+
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
 def search_view(request):
     search = request.GET['search']
     if len(search)>0:
@@ -263,7 +275,8 @@ def search_view(request):
 def rent_view(request, garage_id):
     garage = Garage.objects.get(garage_id=garage_id)
     owner = GarageOwner.objects.get(id=garage.garage_owner_id)
-    return render(request, 'Homepage/rent.html',{'garage':garage, 'owner':owner})
+    review = Reviews.objects.filter(reviewed = garage_id)[:3]
+    return render(request, 'Homepage/rent.html',{'garage':garage, 'owner':owner, 'review':review})
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
@@ -288,17 +301,40 @@ def rent_done(request):
     if request.method == 'POST':
         form = RentalForm(request.POST)
         if form.is_valid():
-            # v = request.POST.get('vehicle')
-            # g = request.POST.get('garage')
-            # p = request.POST.get('policy')
-            # r = date.today()
-            # v = request.POST.get['v']
-            # g = request.POST.get['g']
-            # p = request.POST.get['p']
-            # rent = Rentals(vehicle=v, garage=g, policy=p, rental_date=r)
-            # rent.save()
             form.save()
             messages.success(request, "Successfully Rented")
             return render(request, 'Homepage/rent_done.html',{'message':messages})
         else:
-            return HttpResponse(f"sorry {v} {g} {p}")
+            return HttpResponse(f"sorry")
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
+def review_done(request):
+    if request.method == 'POST':
+        form = ReviewsForm(request.POST)
+        if form.is_valid():
+            uid = request.user.id
+            reviewer = form.cleaned_data['reviewer']
+            reviewed = form.cleaned_data['reviewed']
+            statement = form.cleaned_data['statement']
+            rev = Reviews(user_id = uid, reviewer = reviewer, reviewed = reviewed, statement = statement)
+            rev.save()
+            messages.success(request, "Successfully Reviewed")
+            return render(request, 'Homepage/review_done.html',{'message':messages})
+        else:
+            return HttpResponse(f"sorry")
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required
+def ReviewView(request, rent_id):
+    usr = request.user
+    uid = usr.id
+    try:
+        vo = VehicleOwner.objects.get(users_id = uid)
+        mg = Rentals.objects.get(id = rent_id)
+        form = ReviewsForm()
+        return render(request, 'Homepage/review.html',{'vo':vo, 'mg':mg, 'form':form})
+    except:
+        return render(request, 'Homepage/review.html')
+

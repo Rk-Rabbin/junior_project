@@ -87,13 +87,13 @@ class GarageOwnForm(forms.ModelForm):
                     'number':forms.TextInput(attrs={'class':'form-control'})
                     }
 
-# class ReviewsForm(forms.ModelForm):
-#     class Meta:
-#         model = Reviews
-#         fields = ['reviewer','reviewed','statement']
-#         widgets = {'reviewer':forms.TextInput(attrs={'class':'form-control','PlaceHolder':'Email'}),
-#                     'reviewed':forms.TextInput(attrs={'class':'form-control','PlaceHolder':'Email'}),
-#                     'statement':forms.Textarea(attrs={'class':'form-control'})}
+class ReviewsForm(forms.ModelForm):
+    class Meta:
+        model = Reviews
+        fields = ['reviewer','reviewed','statement']
+        widgets = { 'reviewer':forms.TextInput(attrs={'class':'form-control','PlaceHolder':'Vehicle Owner Id'}),
+                    'reviewed':forms.TextInput(attrs={'class':'form-control','PlaceHolder':'Garage Id'}),
+                    'statement':forms.Textarea(attrs={'class':'form-control'})}
 
 
 class RentalForm(forms.ModelForm):
@@ -101,7 +101,7 @@ class RentalForm(forms.ModelForm):
         model = Rentals
         fields = ['vehicle','garage','policy']
         widgets = {'vehicle':forms.TextInput(attrs={'class':'form-control','placeholder':'Vehicle Owner Id'}),
-                    'garage':forms.TextInput(attrs={'class':'form-control', 'placeholder':'Garage Id'}),
+                    'garage':forms.TextInput(attrs={'class':'form-control', 'placeholder':'Garage Owner Id'}),
                     'policy':forms.Select(attrs={'class':'regDropDown', 'style':'color:black;'}),
                     }
 
