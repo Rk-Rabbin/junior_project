@@ -4,11 +4,11 @@
 {% block main-content %}
 <div class="container mt-6" style="padding-top:110px">
     <h2 class="text-center alert alert-warning">My Vehicles List</h2>
-    {% if messages %}
+    {% comment %} {% if messages %}
          {% for message in messages %}
                <p {% if message.tags %}class="alert alert-{{message.tags}} mb-5"{% endif %}>{{message}}</p>
          {% endfor %}
-      {% endif %}
+      {% endif %} {% endcomment %}
     {% if mv %}
     <table class="table table-hover">
         <thead>
